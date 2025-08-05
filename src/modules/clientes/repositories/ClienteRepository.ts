@@ -1,60 +1,75 @@
-import { Cliente } from '../models/Cliente';
+import { Cliente, ICliente } from '../models/Cliente';
 import { CreateClienteDTO, UpdateClienteDTO } from '../dtos/ClienteDTO';
 
 export class ClienteRepository {
-  private clientes: Cliente[] = [];
-  private nextId = 1;
-
-  async findAll(): Promise<Cliente[]> {
-    return this.clientes;
+  async findAll(): Promise<ICliente[]> {
+    return await Cliente.find().sort({ dataCriacao: -1 });
   }
 
-  async findById(id: string): Promise<Cliente | null> {
-    return this.clientes.find(cliente => cliente.id === id) || null;
+  async findById(id: string): Promise<ICliente | null> {
+    return await Cliente.findById(id);
   }
 
-  async findByEmail(email: string): Promise<Cliente | null> {
-    return this.clientes.find(cliente => cliente.email === email) || null;
+  async findByEmail(email: string): Promise<ICliente | null> {
+    return await Cliente.findOne({ email: email.toLowerCase() });
   }
 
-  async create(clienteData: CreateClienteDTO): Promise<Cliente> {
-    const cliente: Cliente = {
-      id: this.nextId.toString(),
+  async create(clienteData: CreateClienteDTO): Promise<ICliente> {
+    const cliente = new Cliente({
       ...clienteData,
-      dataCriacao: new Date(),
-      dataAtualizacao: new Date(),
-    };
-
-    this.clientes.push(cliente);
-    this.nextId++;
-
-    return cliente;
+      email: clienteData.email.toLowerCase()
+    });
+    return await cliente.save();
   }
 
-  async update(id: string, clienteData: UpdateClienteDTO): Promise<Cliente | null> {
-    const index = this.clientes.findIndex(cliente => cliente.id === id);
-    
-    if (index === -1) {
-      return null;
+  async update(id: string, clienteData: UpdateClienteDTO): Promise<ICliente | null> {
+    const updateData = { ...clienteData };
+    if (updateData.email) {
+      updateData.email = updateData.email.toLowerCase();
     }
-
-    this.clientes[index] = {
-      ...this.clientes[index],
-      ...clienteData,
-      dataAtualizacao: new Date(),
-    };
-
-    return this.clientes[index];
+    
+    return await Cliente.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
+    );
   }
 
   async delete(id: string): Promise<boolean> {
-    const index = this.clientes.findIndex(cliente => cliente.id === id);
-    
-    if (index === -1) {
-      return false;
-    }
+    const result = await Cliente.findByIdAndUpdate(
+      id,
+      { dataExclusao: new Date() },
+      { new: true }
+    );
+    return !!result;
+  }
 
-    this.clientes.splice(index, 1);
-    return true;
+  async search(searchTerm: string): Promise<ICliente[]> {
+    const regex = new RegExp(searchTerm, 'i');
+    return await Cliente.find({
+      $or: [
+        { nome: regex },
+        { email: regex },
+        { cnpj: regex },
+        { cpf: regex }
+      ]
+    }).sort({ dataCriacao: -1 });
+  }
+
+  async count(): Promise<number> {
+    return await Cliente.countDocuments();
+  }
+
+  async findWithPagination(page: number = 1, limit: number = 10): Promise<{ data: ICliente[], total: number }> {
+    const skip = (page - 1) * limit;
+    const [data, total] = await Promise.all([
+      Cliente.find()
+        .sort({ dataCriacao: -1 })
+        .skip(skip)
+        .limit(limit),
+      Cliente.countDocuments()
+    ]);
+
+    return { data, total };
   }
 }

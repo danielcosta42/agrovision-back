@@ -59,11 +59,11 @@ export class PragaService {
 
   private mapToResponseDTO(praga: any): PragaResponseDTO {
     return {
-      id: praga.id!,
+      id: praga._id?.toString() || praga.id,
       nome: praga.nome,
       tipo: praga.tipo,
       gravidade: praga.gravidade,
-      culturaId: praga.culturaId,
+      culturaId: praga.culturaId?.toString() || praga.culturaId,
       dataDeteccao: praga.dataDeteccao,
       areaAfetada: praga.areaAfetada,
       tratamentoAplicado: praga.tratamentoAplicado,

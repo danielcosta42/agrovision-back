@@ -7,6 +7,14 @@ import dotenv from 'dotenv';
 // Swagger
 import { setupSwagger } from './shared/docs/swagger';
 
+// Models - IMPORTANTE: Importar ANTES das rotas para registrar no mongoose
+import './modules/users/models/User';
+import './modules/clientes/models/Cliente';
+import './modules/areas/models/Area';
+import './modules/culturas/models/Cultura';
+import './modules/pragas/models/Praga';
+import './modules/perdas/models/Perda';
+
 // Routes
 import clientesRoutes from './api/routes/clientes.routes';
 import areasRoutes from './api/routes/areas.routes';
@@ -39,7 +47,6 @@ class App {
     this.express = express();
     this.mongoConfig = MongoConfig.getInstance();
     this.relatoriosJob = new GerarRelatoriosJob();
-    
     this.init();
   }
 
@@ -72,15 +79,14 @@ class App {
 
     // API routes
     this.express.use('/api/auth', authRoutes);
-    this.express.use('/api/clientes', clientesRoutes);
-    this.express.use('/api/areas', areasRoutes);
-    this.express.use('/api/culturas', culturasRoutes);
-    this.express.use('/api/pragas', pragasRoutes);
-    this.express.use('/api/perdas', perdasRoutes);
-    this.express.use('/api/users', usersRoutes);
 
-    // Protected routes (example)
-    // this.express.use('/api/admin', authMiddleware, adminRoutes);
+    // Protected routes
+    this.express.use('/api/clientes', authMiddleware, clientesRoutes);
+    this.express.use('/api/areas', authMiddleware, areasRoutes);
+    this.express.use('/api/culturas', authMiddleware, culturasRoutes);
+    this.express.use('/api/pragas', authMiddleware, pragasRoutes);
+    this.express.use('/api/perdas', authMiddleware, perdasRoutes);
+    this.express.use('/api/users', authMiddleware, usersRoutes);
 
     // 404 handler
     this.express.use('*', (req, res) => {
@@ -109,6 +115,7 @@ class App {
   private async connectDatabase(): Promise<void> {
     try {
       await this.mongoConfig.connect();
+      console.log('✅ Modelos registrados e banco conectado');
     } catch (error) {
       console.error('❌ Falha ao conectar ao banco de dados:', error);
     }

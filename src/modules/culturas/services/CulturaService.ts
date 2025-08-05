@@ -54,10 +54,10 @@ export class CulturaService {
 
   private mapToResponseDTO(cultura: any): CulturaResponseDTO {
     return {
-      id: cultura.id!,
+      id: cultura._id?.toString() || cultura.id,
       nome: cultura.nome,
       variedade: cultura.variedade,
-      areaId: cultura.areaId,
+      areaId: cultura.areaId?.toString() || cultura.areaId,
       dataPlantio: cultura.dataPlantio,
       dataColheita: cultura.dataColheita,
       estadoAtual: cultura.estadoAtual,

@@ -54,11 +54,11 @@ export class AreaService {
 
   private mapToResponseDTO(area: any): AreaResponseDTO {
     return {
-      id: area.id!,
+      id: area._id?.toString() || area.id,
       nome: area.nome,
       tamanho: area.tamanho,
       localizacao: area.localizacao,
-      clienteId: area.clienteId,
+      clienteId: area.clienteId?.toString() || area.clienteId,
       tipo: area.tipo,
       solo: area.solo,
       dataCriacao: area.dataCriacao!,

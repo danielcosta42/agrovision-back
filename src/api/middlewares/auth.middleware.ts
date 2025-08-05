@@ -30,7 +30,7 @@ class AuthMiddleware {
         const token = this.extractToken(req);
         
         if (!token) {
-          return res.status(401).json({ 
+          return res.status(401).json({
             error: 'Token de acesso requerido',
             message: 'Forneça um token de autenticação válido'
           });
@@ -54,9 +54,7 @@ class AuthMiddleware {
             error: 'Usuário não encontrado',
             message: 'O usuário associado ao token não existe'
           });
-        }
-
-        // Verificar se o usuário está ativo
+        }        // Verificar se o usuário está ativo
         if (user.status !== 'ativo') {
           return res.status(401).json({ 
             error: 'Usuário inativo',
@@ -84,7 +82,7 @@ class AuthMiddleware {
 
         next();
       } catch (error) {
-        console.error('Erro na autenticação:', error);
+        console.error('❌ [AuthMiddleware] Erro na autenticação:', error);
         return res.status(500).json({ 
           error: 'Erro interno do servidor',
           message: 'Erro ao processar autenticação'

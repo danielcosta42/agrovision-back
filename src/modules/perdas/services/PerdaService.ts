@@ -87,8 +87,8 @@ export class PerdaService {
 
   private mapToResponseDTO(perda: any): PerdaResponseDTO {
     return {
-      id: perda.id!,
-      culturaId: perda.culturaId,
+      id: perda._id?.toString() || perda.id,
+      culturaId: perda.culturaId?.toString() || perda.culturaId,
       tipo: perda.tipo,
       descricao: perda.descricao,
       quantidadeAfetada: perda.quantidadeAfetada,

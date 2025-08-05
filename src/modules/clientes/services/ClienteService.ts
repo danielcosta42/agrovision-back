@@ -65,7 +65,7 @@ export class ClienteService {
 
   private mapToResponseDTO(cliente: any): ClienteResponseDTO {
     return {
-      id: cliente.id!,
+      id: cliente._id?.toString() || cliente.id,
       nome: cliente.nome,
       email: cliente.email,
       telefone: cliente.telefone,
