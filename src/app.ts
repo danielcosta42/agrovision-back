@@ -4,6 +4,9 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 
+// Swagger
+import { setupSwagger } from './shared/docs/swagger';
+
 // Routes
 import clientesRoutes from './api/routes/clientes.routes';
 import areasRoutes from './api/routes/areas.routes';
@@ -40,6 +43,7 @@ class App {
 
   private init(): void {
     this.setupMiddlewares();
+    this.setupSwagger();
     this.setupRoutes();
     this.setupErrorHandling();
     this.connectDatabase();
@@ -52,6 +56,10 @@ class App {
     this.express.use(morgan('combined'));
     this.express.use(express.json());
     this.express.use(express.urlencoded({ extended: true }));
+  }
+
+  private setupSwagger(): void {
+    setupSwagger(this.express);
   }
 
   private setupRoutes(): void {

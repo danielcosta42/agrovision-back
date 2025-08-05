@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { AreaController } from '../../modules/areas/controllers/AreaController';
+import { validateSchema, validateQuery, validateParams } from '../middlewares/validation.middleware';
+import { areaCreateSchema, areaUpdateSchema, areaQuerySchema, mongoIdSchema } from '../../shared/validation/schemas';
 
 const router = Router();
 const areaController = new AreaController();
@@ -84,7 +86,10 @@ const areaController = new AreaController();
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.get('/', (req, res) => areaController.index(req, res));
+router.get('/', 
+  validateQuery(areaQuerySchema),
+  (req, res) => areaController.index(req, res)
+);
 
 /**
  * @swagger
@@ -117,7 +122,10 @@ router.get('/', (req, res) => areaController.index(req, res));
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.get('/:id', (req, res) => areaController.show(req, res));
+router.get('/:id', 
+  validateParams(mongoIdSchema),
+  (req, res) => areaController.show(req, res)
+);
 
 /**
  * @swagger
@@ -170,7 +178,10 @@ router.get('/:id', (req, res) => areaController.show(req, res));
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.post('/', (req, res) => areaController.store(req, res));
+router.post('/', 
+  validateSchema(areaCreateSchema),
+  (req, res) => areaController.store(req, res)
+);
 
 /**
  * @swagger
@@ -227,7 +238,11 @@ router.post('/', (req, res) => areaController.store(req, res));
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.put('/:id', (req, res) => areaController.update(req, res));
+router.put('/:id', 
+  validateParams(mongoIdSchema),
+  validateSchema(areaUpdateSchema),
+  (req, res) => areaController.update(req, res)
+);
 
 /**
  * @swagger
@@ -263,6 +278,9 @@ router.put('/:id', (req, res) => areaController.update(req, res));
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.delete('/:id', (req, res) => areaController.delete(req, res));
+router.delete('/:id', 
+  validateParams(mongoIdSchema),
+  (req, res) => areaController.delete(req, res)
+);
 
 export default router;
