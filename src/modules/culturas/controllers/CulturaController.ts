@@ -1,18 +1,25 @@
 import { Request, Response } from 'express';
-import { ClienteService } from '../services/ClienteService';
-import { CreateClienteDTO, UpdateClienteDTO } from '../dtos/ClienteDTO';
+import { CulturaService } from '../services/CulturaService';
+import { CreateCulturaDTO, UpdateCulturaDTO } from '../dtos/CulturaDTO';
 
-export class ClienteController {
-  private clienteService: ClienteService;
+export class CulturaController {
+  private culturaService: CulturaService;
 
   constructor() {
-    this.clienteService = new ClienteService();
+    this.culturaService = new CulturaService();
   }
 
   async index(req: Request, res: Response): Promise<Response> {
     try {
-      const clientes = await this.clienteService.getAllClientes();
-      return res.json(clientes);
+      const { areaId } = req.query;
+      
+      if (areaId) {
+        const culturas = await this.culturaService.getCulturasByArea(areaId as string);
+        return res.json(culturas);
+      }
+
+      const culturas = await this.culturaService.getAllCulturas();
+      return res.json(culturas);
     } catch (error) {
       return res.status(500).json({ error: 'Erro interno do servidor' });
     }
@@ -21,8 +28,8 @@ export class ClienteController {
   async show(req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.params;
-      const cliente = await this.clienteService.getClienteById(id);
-      return res.json(cliente);
+      const cultura = await this.culturaService.getCulturaById(id);
+      return res.json(cultura);
     } catch (error: any) {
       if (error.statusCode) {
         return res.status(error.statusCode).json({ error: error.message });
@@ -33,9 +40,9 @@ export class ClienteController {
 
   async store(req: Request, res: Response): Promise<Response> {
     try {
-      const clienteData: CreateClienteDTO = req.body;
-      const cliente = await this.clienteService.createCliente(clienteData);
-      return res.status(201).json(cliente);
+      const culturaData: CreateCulturaDTO = req.body;
+      const cultura = await this.culturaService.createCultura(culturaData);
+      return res.status(201).json(cultura);
     } catch (error: any) {
       if (error.statusCode) {
         return res.status(error.statusCode).json({ error: error.message });
@@ -47,9 +54,9 @@ export class ClienteController {
   async update(req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.params;
-      const clienteData: UpdateClienteDTO = req.body;
-      const cliente = await this.clienteService.updateCliente(id, clienteData);
-      return res.json(cliente);
+      const culturaData: UpdateCulturaDTO = req.body;
+      const cultura = await this.culturaService.updateCultura(id, culturaData);
+      return res.json(cultura);
     } catch (error: any) {
       if (error.statusCode) {
         return res.status(error.statusCode).json({ error: error.message });
@@ -61,7 +68,7 @@ export class ClienteController {
   async delete(req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.params;
-      await this.clienteService.deleteCliente(id);
+      await this.culturaService.deleteCultura(id);
       return res.status(204).send();
     } catch (error: any) {
       if (error.statusCode) {
