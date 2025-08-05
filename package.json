@@ -12,7 +12,9 @@
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
     "migration:up": "ts-node src/shared/database/migrations/001_create_indexes.ts up",
-    "migration:down": "ts-node src/shared/database/migrations/001_create_indexes.ts down"
+    "migration:down": "ts-node src/shared/database/migrations/001_create_indexes.ts down",
+    "create-admin": "ts-node scripts/create-admin.ts",
+    "reset-admin-password": "ts-node scripts/create-admin.ts --reset-password"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

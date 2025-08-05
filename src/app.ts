@@ -13,6 +13,8 @@ import areasRoutes from './api/routes/areas.routes';
 import culturasRoutes from './api/routes/culturas.routes';
 import pragasRoutes from './api/routes/pragas.routes';
 import perdasRoutes from './api/routes/perdas.routes';
+import usersRoutes from './api/routes/users.routes';
+import authRoutes from './api/routes/auth.routes';
 
 // Middlewares
 import { authMiddleware } from './api/middlewares/auth.middleware';
@@ -69,11 +71,13 @@ class App {
     });
 
     // API routes
+    this.express.use('/api/auth', authRoutes);
     this.express.use('/api/clientes', clientesRoutes);
     this.express.use('/api/areas', areasRoutes);
     this.express.use('/api/culturas', culturasRoutes);
     this.express.use('/api/pragas', pragasRoutes);
     this.express.use('/api/perdas', perdasRoutes);
+    this.express.use('/api/users', usersRoutes);
 
     // Protected routes (example)
     // this.express.use('/api/admin', authMiddleware, adminRoutes);

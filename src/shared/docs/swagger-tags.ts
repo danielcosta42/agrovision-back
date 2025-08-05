@@ -7,6 +7,8 @@
  *     description: Gestão de áreas de plantio e terrenos
  *   - name: Culturas
  *     description: Cadastro e gestão de tipos de culturas
+ *   - name: Users
+ *     description: Gerenciamento de usuários e controle de acesso por cliente
  *   - name: Pragas
  *     description: Monitoramento e controle de pragas
  *   - name: Perdas

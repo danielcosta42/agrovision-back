@@ -474,6 +474,177 @@
  *         data:
  *           type: object
  *           description: Dados de resposta (opcional)
+ * 
+ *     User:
+ *       type: object
+ *       required:
+ *         - nome
+ *         - email
+ *         - senha
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: ID único do usuário
+ *           example: "64a1b2c3d4e5f6789012345"
+ *         nome:
+ *           type: string
+ *           description: Nome completo do usuário
+ *           example: "João Silva"
+ *           minLength: 2
+ *           maxLength: 100
+ *         email:
+ *           type: string
+ *           format: email
+ *           description: Email do usuário
+ *           example: "joao.silva@email.com"
+ *         telefone:
+ *           type: string
+ *           description: Telefone do usuário
+ *           example: "(11) 99999-9999"
+ *         avatar:
+ *           type: string
+ *           description: URL do avatar do usuário
+ *           example: "https://example.com/avatar.jpg"
+ *         role:
+ *           type: string
+ *           enum: ["admin", "manager", "operator", "viewer"]
+ *           description: Papel do usuário no sistema
+ *           example: "operator"
+ *         status:
+ *           type: string
+ *           enum: ["ativo", "inativo", "suspenso"]
+ *           description: Status do usuário
+ *           example: "ativo"
+ *         tipoAcesso:
+ *           type: string
+ *           enum: ["global", "cliente-especifico"]
+ *           description: Tipo de acesso do usuário
+ *           example: "cliente-especifico"
+ *         clientesVinculados:
+ *           type: array
+ *           description: Clientes aos quais o usuário tem acesso
+ *           items:
+ *             type: object
+ *             properties:
+ *               _id:
+ *                 type: string
+ *                 example: "64a1b2c3d4e5f6789012346"
+ *               nome:
+ *                 type: string
+ *                 example: "Fazenda São José"
+ *               email:
+ *                 type: string
+ *                 example: "contato@fazendaosanjose.com.br"
+ *         permissoes:
+ *           type: object
+ *           description: Permissões específicas do usuário
+ *           properties:
+ *             areas:
+ *               type: object
+ *               properties:
+ *                 visualizar:
+ *                   type: boolean
+ *                   example: true
+ *                 criar:
+ *                   type: boolean
+ *                   example: false
+ *                 editar:
+ *                   type: boolean
+ *                   example: false
+ *                 excluir:
+ *                   type: boolean
+ *                   example: false
+ *             clientes:
+ *               type: object
+ *               properties:
+ *                 visualizar:
+ *                   type: boolean
+ *                   example: true
+ *                 criar:
+ *                   type: boolean
+ *                   example: false
+ *                 editar:
+ *                   type: boolean
+ *                   example: false
+ *                 excluir:
+ *                   type: boolean
+ *                   example: false
+ *             culturas:
+ *               type: object
+ *               properties:
+ *                 visualizar:
+ *                   type: boolean
+ *                   example: true
+ *                 criar:
+ *                   type: boolean
+ *                   example: true
+ *                 editar:
+ *                   type: boolean
+ *                   example: true
+ *                 excluir:
+ *                   type: boolean
+ *                   example: false
+ *             usuarios:
+ *               type: object
+ *               properties:
+ *                 visualizar:
+ *                   type: boolean
+ *                   example: false
+ *                 criar:
+ *                   type: boolean
+ *                   example: false
+ *                 editar:
+ *                   type: boolean
+ *                   example: false
+ *                 excluir:
+ *                   type: boolean
+ *                   example: false
+ *             relatorios:
+ *               type: object
+ *               properties:
+ *                 visualizar:
+ *                   type: boolean
+ *                   example: true
+ *                 exportar:
+ *                   type: boolean
+ *                   example: false
+ *         ultimoLogin:
+ *           type: string
+ *           format: date-time
+ *           description: Data do último login
+ *           example: "2025-01-15T10:30:00Z"
+ *         tentativasLogin:
+ *           type: number
+ *           description: Número de tentativas de login
+ *           example: 0
+ *         bloqueadoAte:
+ *           type: string
+ *           format: date-time
+ *           description: Data até quando o usuário está bloqueado
+ *           example: null
+ *         criadoPor:
+ *           type: object
+ *           description: Usuário que criou este usuário
+ *           properties:
+ *             _id:
+ *               type: string
+ *               example: "64a1b2c3d4e5f6789012347"
+ *             nome:
+ *               type: string
+ *               example: "Admin Sistema"
+ *             email:
+ *               type: string
+ *               example: "admin@agrovision.com"
+ *         dataCriacao:
+ *           type: string
+ *           format: date-time
+ *           description: Data de criação
+ *           example: "2025-01-15T10:30:00Z"
+ *         dataAtualizacao:
+ *           type: string
+ *           format: date-time
+ *           description: Data da última atualização
+ *           example: "2025-01-15T10:30:00Z"
  */
 
 export {};
