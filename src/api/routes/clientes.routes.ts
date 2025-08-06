@@ -131,72 +131,86 @@ router.get('/:id', (req, res) => clienteController.show(req, res));
  *             required:
  *               - nome
  *               - email
- *               - telefone
- *               - documento
- *               - tipoDocumento
  *             properties:
  *               nome:
  *                 type: string
  *                 minLength: 2
  *                 maxLength: 100
- *                 example: "João Silva"
+ *                 example: "Fazenda São José"
  *               email:
  *                 type: string
  *                 format: email
- *                 example: "joao.silva@email.com"
+ *                 example: "contato@fazendasaojose.com.br"
  *               telefone:
  *                 type: string
  *                 example: "(11) 99999-9999"
- *               documento:
+ *               cnpj:
+ *                 type: string
+ *                 example: "12.345.678/0001-90"
+ *               cpf:
  *                 type: string
  *                 example: "123.456.789-01"
- *               tipoDocumento:
+ *               responsavel:
  *                 type: string
- *                 enum: [CPF, CNPJ]
- *                 example: "CPF"
+ *                 example: "João Silva"
+ *               tipoProducao:
+ *                 type: string
+ *                 enum: [grãos, pecuária, mista, frutas, verduras]
+ *                 example: "grãos"
+ *               areaTotalHectares:
+ *                 type: number
+ *                 minimum: 0
+ *                 example: 150.5
+ *               observacoes:
+ *                 type: string
+ *                 maxLength: 1000
+ *                 example: "Cliente desde 2020, produção de soja e milho"
+ *               status:
+ *                 type: string
+ *                 enum: [ativo, inativo, suspenso]
+ *                 example: "ativo"
  *               endereco:
  *                 type: object
  *                 properties:
  *                   rua:
  *                     type: string
- *                     example: "Rua das Flores, 123"
+ *                     example: "Estrada Rural, Km 15"
+ *                   numero:
+ *                     type: string
+ *                     example: "S/N"
+ *                   complemento:
+ *                     type: string
+ *                     example: "Zona Rural"
+ *                   bairro:
+ *                     type: string
+ *                     example: "Centro"
  *                   cidade:
  *                     type: string
- *                     example: "São Paulo"
+ *                     example: "Ribeirão Preto"
  *                   estado:
  *                     type: string
  *                     example: "SP"
  *                   cep:
  *                     type: string
- *                     example: "01234-567"
- *               status:
- *                 type: string
- *                 enum: [ativo, inativo, suspenso]
- *                 default: "ativo"
+ *                     example: "14000-000"
  *           examples:
- *             pessoa_fisica:
- *               summary: Cliente Pessoa Física
+ *             fazenda_completa:
+ *               summary: Cliente Fazenda Completo
  *               value:
- *                 nome: "João Silva"
- *                 email: "joao.silva@email.com"
- *                 telefone: "(11) 99999-9999"
- *                 documento: "123.456.789-01"
- *                 tipoDocumento: "CPF"
- *                 endereco:
- *                   rua: "Rua das Flores, 123"
- *                   cidade: "São Paulo"
- *                   estado: "SP"
- *                   cep: "01234-567"
- *             pessoa_juridica:
- *               summary: Cliente Pessoa Jurídica
- *               value:
- *                 nome: "Fazenda São José Ltda"
- *                 email: "contato@fazendaosanjose.com.br"
- *                 telefone: "(11) 3333-4444"
- *                 documento: "12.345.678/0001-99"
- *                 tipoDocumento: "CNPJ"
+ *                 nome: "Fazenda São José"
+ *                 email: "contato@fazendasaojose.com.br"
+ *                 telefone: "(16) 3333-4444"
+ *                 cnpj: "12.345.678/0001-90"
+ *                 responsavel: "João da Silva"
+ *                 tipoProducao: "grãos"
+ *                 areaTotalHectares: 150.5
+ *                 observacoes: "Cliente desde 2020, produção de soja e milho"
+ *                 status: "ativo"
  *                 endereco:
  *                   rua: "Estrada Rural, Km 15"
+ *                   numero: "S/N"
+ *                   complemento: "Zona Rural"
+ *                   bairro: "Centro"
  *                   cidade: "Ribeirão Preto"
  *                   estado: "SP"
  *                   cep: "14000-000"
@@ -248,10 +262,34 @@ router.post('/', (req, res) => clienteController.store(req, res));
  *                 format: email
  *               telefone:
  *                 type: string
+ *               cnpj:
+ *                 type: string
+ *               cpf:
+ *                 type: string
+ *               responsavel:
+ *                 type: string
+ *               tipoProducao:
+ *                 type: string
+ *                 enum: [grãos, pecuária, mista, frutas, verduras]
+ *               areaTotalHectares:
+ *                 type: number
+ *                 minimum: 0
+ *               observacoes:
+ *                 type: string
+ *                 maxLength: 1000
+ *               status:
+ *                 type: string
+ *                 enum: [ativo, inativo, suspenso]
  *               endereco:
  *                 type: object
  *                 properties:
  *                   rua:
+ *                     type: string
+ *                   numero:
+ *                     type: string
+ *                   complemento:
+ *                     type: string
+ *                   bairro:
  *                     type: string
  *                   cidade:
  *                     type: string
@@ -259,9 +297,6 @@ router.post('/', (req, res) => clienteController.store(req, res));
  *                     type: string
  *                   cep:
  *                     type: string
- *               status:
- *                 type: string
- *                 enum: [ativo, inativo, suspenso]
  *     responses:
  *       200:
  *         description: Cliente atualizado com sucesso

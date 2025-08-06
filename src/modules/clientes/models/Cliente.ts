@@ -7,12 +7,20 @@ export interface ICliente extends Document {
   telefone?: string;
   endereco?: {
     rua: string;
+    numero?: string;
+    complemento?: string;
+    bairro?: string;
     cidade: string;
     estado: string;
     cep: string;
   };
   cnpj?: string;
   cpf?: string;
+  responsavel?: string;
+  tipoProducao?: string;
+  areaTotalHectares?: number;
+  observacoes?: string;
+  status?: string;
   dataCriacao: Date;
   dataAtualizacao: Date;
   dataExclusao?: Date;
@@ -44,6 +52,21 @@ const ClienteSchema = new Schema<ICliente>({
       trim: true,
       maxlength: [200, 'Rua deve ter no máximo 200 caracteres']
     },
+    numero: {
+      type: String,
+      trim: true,
+      maxlength: [20, 'Número deve ter no máximo 20 caracteres']
+    },
+    complemento: {
+      type: String,
+      trim: true,
+      maxlength: [100, 'Complemento deve ter no máximo 100 caracteres']
+    },
+    bairro: {
+      type: String,
+      trim: true,
+      maxlength: [100, 'Bairro deve ter no máximo 100 caracteres']
+    },
     cidade: {
       type: String,
       trim: true,
@@ -69,6 +92,32 @@ const ClienteSchema = new Schema<ICliente>({
     type: String,
     trim: true,
     maxlength: [14, 'CPF deve ter no máximo 14 caracteres']
+  },
+  responsavel: {
+    type: String,
+    trim: true,
+    maxlength: [100, 'Responsável deve ter no máximo 100 caracteres']
+  },
+  tipoProducao: {
+    type: String,
+    trim: true,
+    enum: ['grãos', 'pecuária', 'mista', 'frutas', 'verduras'],
+    default: 'grãos'
+  },
+  areaTotalHectares: {
+    type: Number,
+    min: [0, 'Área total deve ser maior ou igual a zero']
+  },
+  observacoes: {
+    type: String,
+    trim: true,
+    maxlength: [1000, 'Observações devem ter no máximo 1000 caracteres']
+  },
+  status: {
+    type: String,
+    trim: true,
+    enum: ['ativo', 'inativo', 'suspenso'],
+    default: 'ativo'
   },
   dataCriacao: {
     type: Date,
@@ -114,12 +163,20 @@ export interface Cliente {
   telefone?: string;
   endereco?: {
     rua: string;
+    numero?: string;
+    complemento?: string;
+    bairro?: string;
     cidade: string;
     estado: string;
     cep: string;
   };
   cnpj?: string;
   cpf?: string;
+  responsavel?: string;
+  tipoProducao?: string;
+  areaTotalHectares?: number;
+  observacoes?: string;
+  status?: string;
   dataCriacao?: Date;
   dataAtualizacao?: Date;
 }

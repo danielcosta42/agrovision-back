@@ -4,12 +4,20 @@ export interface CreateClienteDTO {
   telefone?: string;
   endereco?: {
     rua: string;
+    numero?: string;
+    complemento?: string;
+    bairro?: string;
     cidade: string;
     estado: string;
     cep: string;
   };
   cnpj?: string;
   cpf?: string;
+  responsavel?: string;
+  tipoProducao?: string;
+  areaTotalHectares?: number;
+  observacoes?: string;
+  status?: string;
 }
 
 export interface UpdateClienteDTO {
@@ -18,12 +26,20 @@ export interface UpdateClienteDTO {
   telefone?: string;
   endereco?: {
     rua: string;
+    numero?: string;
+    complemento?: string;
+    bairro?: string;
     cidade: string;
     estado: string;
     cep: string;
   };
   cnpj?: string;
   cpf?: string;
+  responsavel?: string;
+  tipoProducao?: string;
+  areaTotalHectares?: number;
+  observacoes?: string;
+  status?: string;
 }
 
 export interface ClienteResponseDTO {
@@ -33,12 +49,20 @@ export interface ClienteResponseDTO {
   telefone?: string;
   endereco?: {
     rua: string;
+    numero?: string;
+    complemento?: string;
+    bairro?: string;
     cidade: string;
     estado: string;
     cep: string;
   };
   cnpj?: string;
   cpf?: string;
+  responsavel?: string;
+  tipoProducao?: string;
+  areaTotalHectares?: number;
+  observacoes?: string;
+  status?: string;
   dataCriacao: Date;
   dataAtualizacao: Date;
 }
