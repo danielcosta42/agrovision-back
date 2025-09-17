@@ -9,8 +9,12 @@ export interface Cliente {
     estado: string;
     cep: string;
   };
-  cnpj?: string;
-  cpf?: string;
+  cpfCnpj?: string;
+  responsavel?: string;
+  tipoProducao?: string;
+  areaTotalHectares?: number;
+  observacoes?: string;
+  status?: string;
   dataCriacao?: Date;
   dataAtualizacao?: Date;
 }

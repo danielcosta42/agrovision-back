@@ -27,12 +27,13 @@ export class ClienteService {
   async createCliente(clienteData: CreateClienteDTO): Promise<ClienteResponseDTO> {
     // Verificar se email já existe
     const existingCliente = await this.clienteRepository.findByEmail(clienteData.email);
-    
     if (existingCliente) {
       throw new AppError('Email já está em uso', 400);
     }
 
-    const cliente = await this.clienteRepository.create(clienteData);
+    const cliente = await this.clienteRepository.create({
+      ...clienteData
+    });
     return this.mapToResponseDTO(cliente);
   }
 
@@ -70,8 +71,12 @@ export class ClienteService {
       email: cliente.email,
       telefone: cliente.telefone,
       endereco: cliente.endereco,
-      cnpj: cliente.cnpj,
-      cpf: cliente.cpf,
+      cpfCnpj: cliente.cpfCnpj,
+      responsavel: cliente.responsavel,
+      tipoProducao: cliente.tipoProducao,
+      areaTotalHectares: cliente.areaTotalHectares,
+      observacoes: cliente.observacoes,
+      status: cliente.status,
       dataCriacao: cliente.dataCriacao!,
       dataAtualizacao: cliente.dataAtualizacao!,
     };

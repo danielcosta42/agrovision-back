@@ -11,8 +11,7 @@ export interface CreateClienteDTO {
     estado: string;
     cep: string;
   };
-  cnpj?: string;
-  cpf?: string;
+  cpfCnpj?: string;
   responsavel?: string;
   tipoProducao?: string;
   areaTotalHectares?: number;
@@ -29,12 +28,11 @@ export interface UpdateClienteDTO {
     numero?: string;
     complemento?: string;
     bairro?: string;
-    cidade: string;
-    estado: string;
-    cep: string;
+    cidade?: string;
+    estado?: string;
+    cep?: string;
   };
-  cnpj?: string;
-  cpf?: string;
+  cpfCnpj?: string;
   responsavel?: string;
   tipoProducao?: string;
   areaTotalHectares?: number;
@@ -56,8 +54,7 @@ export interface ClienteResponseDTO {
     estado: string;
     cep: string;
   };
-  cnpj?: string;
-  cpf?: string;
+  cpfCnpj?: string;
   responsavel?: string;
   tipoProducao?: string;
   areaTotalHectares?: number;

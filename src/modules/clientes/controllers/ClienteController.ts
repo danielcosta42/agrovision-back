@@ -14,7 +14,8 @@ export class ClienteController {
       const clientes = await this.clienteService.getAllClientes();
       return res.json(clientes);
     } catch (error) {
-      return res.status(500).json({ error: 'Erro interno do servidor' });
+      const errorMessage = (error instanceof Error) ? error.message : 'Erro interno do servidors';
+      return res.status(500).json({ error: errorMessage });
     }
   }
 
@@ -27,7 +28,7 @@ export class ClienteController {
       if (error.statusCode) {
         return res.status(error.statusCode).json({ error: error.message });
       }
-      return res.status(500).json({ error: 'Erro interno do servidor' });
+      return res.status(500).json({ error: error.message || 'Erro interno do servidors' });
     }
   }
 
@@ -37,10 +38,27 @@ export class ClienteController {
       const cliente = await this.clienteService.createCliente(clienteData);
       return res.status(201).json(cliente);
     } catch (error: any) {
+      // Erro customizado da aplicação
       if (error.statusCode) {
         return res.status(error.statusCode).json({ error: error.message });
       }
-      return res.status(500).json({ error: 'Erro interno do servidor' });
+
+      // Erro de validação do MongoDB/Mongoose
+      if (error.name === 'ValidationError' && error.errors) {
+        const details = Object.values(error.errors).map((e: any) => e.message);
+        return res.status(400).json({ error: 'Erro de validação', details });
+      }
+
+      // Erro de validação do MongoDB (schema)
+      if (error.code === 121 && error.errInfo && error.errInfo.details) {
+        return res.status(400).json({
+          error: 'Erro de validação do banco de dados',
+          details: error.errInfo.details.schemaRulesNotSatisfied || error.errInfo.details
+        });
+      }
+
+      // Outros erros
+      return res.status(500).json({ error: error.message || 'Erro interno do servidor' });
     }
   }
 
@@ -54,7 +72,7 @@ export class ClienteController {
       if (error.statusCode) {
         return res.status(error.statusCode).json({ error: error.message });
       }
-      return res.status(500).json({ error: 'Erro interno do servidor' });
+      return res.status(500).json({ error: 'Erro interno do servidors' });
     }
   }
 
@@ -67,7 +85,7 @@ export class ClienteController {
       if (error.statusCode) {
         return res.status(error.statusCode).json({ error: error.message });
       }
-      return res.status(500).json({ error: 'Erro interno do servidor' });
+      return res.status(500).json({ error: 'Erro interno do servidors' });
     }
   }
 }

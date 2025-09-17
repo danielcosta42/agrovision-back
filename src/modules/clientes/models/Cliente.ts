@@ -14,8 +14,7 @@ export interface ICliente extends Document {
     estado: string;
     cep: string;
   };
-  cnpj?: string;
-  cpf?: string;
+  cpfCnpj?: string;
   responsavel?: string;
   tipoProducao?: string;
   areaTotalHectares?: number;
@@ -83,15 +82,11 @@ const ClienteSchema = new Schema<ICliente>({
       maxlength: [10, 'CEP deve ter no máximo 10 caracteres']
     }
   },
-  cnpj: {
+  cpfCnpj: {
     type: String,
+    required: [true, 'CPF ou CNPJ é obrigatório'],
     trim: true,
-    maxlength: [18, 'CNPJ deve ter no máximo 18 caracteres']
-  },
-  cpf: {
-    type: String,
-    trim: true,
-    maxlength: [14, 'CPF deve ter no máximo 14 caracteres']
+    unique: true
   },
   responsavel: {
     type: String,
@@ -148,10 +143,10 @@ ClienteSchema.pre('save', function(next) {
   next();
 });
 
-// Soft delete - não retornar registros excluídos
-ClienteSchema.pre(/^find/, function(this: any) {
-  this.find({ dataExclusao: { $exists: false } });
-});
+// // Soft delete - não retornar registros excluídos
+// ClienteSchema.pre(/^find/, function(this: any) {
+//   this.find({ dataExclusao: { $exists: false } });
+// });
 
 export const Cliente = mongoose.model<ICliente>('Cliente', ClienteSchema);
 
@@ -170,8 +165,7 @@ export interface Cliente {
     estado: string;
     cep: string;
   };
-  cnpj?: string;
-  cpf?: string;
+  cpfCnpj?: string;
   responsavel?: string;
   tipoProducao?: string;
   areaTotalHectares?: number;
