@@ -3,6 +3,10 @@ import { CreateAreaDTO, UpdateAreaDTO, AreaResponseDTO } from '../dtos/AreaDTO';
 import { AppError } from '../../../shared/errors/AppError';
 
 export class AreaService {
+  async getAreasByClientes(clientesIds: string[]): Promise<AreaResponseDTO[]> {
+    const areas = await this.areaRepository.findByClientesIds(clientesIds);
+    return areas.map(area => this.mapToResponseDTO(area));
+  }
   private areaRepository: AreaRepository;
 
   constructor() {

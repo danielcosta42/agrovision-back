@@ -3,6 +3,11 @@ import { CreateAreaDTO, UpdateAreaDTO } from '../dtos/AreaDTO';
 import mongoose from 'mongoose';
 
 export class AreaRepository {
+  async findByClientesIds(clientesIds: string[]): Promise<IArea[]> {
+    return await Area.find({ clienteId: { $in: clientesIds } })
+      .populate('clienteId', 'nome email')
+      .sort({ dataCriacao: -1 });
+  }
   async findAll(): Promise<IArea[]> {
     return await Area.find().populate('clienteId', 'nome email').sort({ dataCriacao: -1 });
   }
