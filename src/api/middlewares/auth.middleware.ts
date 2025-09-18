@@ -2,10 +2,11 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserService } from '../../modules/users/services/UserService';
 
+
 interface JwtPayload {
   id: string;
-  email: string;
   role: string;
+  clientesVinculados: string[];
   iat?: number;
   exp?: number;
 }
@@ -13,9 +14,8 @@ interface JwtPayload {
 interface AuthenticatedRequest extends Request {
   user?: {
     id: string;
-    email: string;
     role: string;
-    clientesVinculados?: string[];
+    clientesVinculados: string[];
     tipoAcesso?: string;
   };
 }
@@ -46,38 +46,11 @@ class AuthMiddleware {
           });
         }
 
-        // Buscar dados atualizados do usuário
-        const user = await this.userService.findById(decoded.id);
-        
-        if (!user) {
-          return res.status(401).json({ 
-            error: 'Usuário não encontrado',
-            message: 'O usuário associado ao token não existe'
-          });
-        }        // Verificar se o usuário está ativo
-        if (user.status !== 'ativo') {
-          return res.status(401).json({ 
-            error: 'Usuário inativo',
-            message: 'Sua conta está inativa ou suspensa'
-          });
-        }
-
-        // Verificar se o usuário não está bloqueado
-        if (user.bloqueadoAte && user.bloqueadoAte > new Date()) {
-          return res.status(401).json({ 
-            error: 'Usuário bloqueado',
-            message: `Conta bloqueada até ${user.bloqueadoAte.toISOString()}`,
-            bloqueadoAte: user.bloqueadoAte
-          });
-        }
-
-        // Anexar dados do usuário à requisição
+        // Anexar dados do usuário à requisição diretamente do token
         req.user = {
-          id: user._id.toString(),
-          email: user.email,
-          role: user.role,
-          clientesVinculados: user.clientesVinculados?.map(id => id.toString()),
-          tipoAcesso: user.tipoAcesso
+          id: decoded.id,
+          role: decoded.role,
+          clientesVinculados: decoded.clientesVinculados,
         };
 
         next();
@@ -120,15 +93,15 @@ class AuthMiddleware {
     }
   }
 
-  public generateToken(user: { id: string; email: string; role: string }): string {
+  public generateToken(user: { id: string; role: string; clientesVinculados: string[] }): string {
     const jwtSecret = process.env.JWT_SECRET || 'secret';
     const jwtExpiration = process.env.JWT_EXPIRATION || '24h';
 
     return jwt.sign(
       {
         id: user.id,
-        email: user.email,
-        role: user.role
+        role: user.role,
+        clientesVinculados: user.clientesVinculados
       },
       jwtSecret,
       {

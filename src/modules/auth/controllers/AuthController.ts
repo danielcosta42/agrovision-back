@@ -84,8 +84,8 @@ export class AuthController {
       // Gerar token
       const token = this.authMiddleware.generateToken({
         id: user._id.toString(),
-        email: user.email,
-        role: user.role
+        role: user.role,
+        clientesVinculados: user.clientesVinculados?.map((id: any) => id.toString()) || []
       });
 
       // Remover dados sensíveis da resposta

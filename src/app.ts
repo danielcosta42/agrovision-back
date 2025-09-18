@@ -10,19 +10,19 @@ import { setupSwagger } from './shared/docs/swagger';
 // Models - IMPORTANTE: Importar ANTES das rotas para registrar no mongoose
 import './modules/users/models/User';
 import './modules/clientes/models/Cliente';
-import './modules/areas/models/Area';
+import './modules/propriedades/models/Propriedade';
 import './modules/culturas/models/Cultura';
 import './modules/pragas/models/Praga';
 import './modules/perdas/models/Perda';
 
 // Routes
 import clientesRoutes from './api/routes/clientes.routes';
-import areasRoutes from './api/routes/areas.routes';
 import culturasRoutes from './api/routes/culturas.routes';
 import pragasRoutes from './api/routes/pragas.routes';
 import perdasRoutes from './api/routes/perdas.routes';
 import usersRoutes from './api/routes/users.routes';
 import authRoutes from './api/routes/auth.routes';
+import propriedadesRoutes from './api/routes/propriedades.routes';
 
 // Middlewares
 import { authMiddleware } from './api/middlewares/auth.middleware';
@@ -82,7 +82,7 @@ class App {
 
     // Protected routes
     this.express.use('/api/clientes', authMiddleware, clientesRoutes);
-    this.express.use('/api/areas', authMiddleware, areasRoutes);
+    this.express.use('/api/propriedades', authMiddleware, propriedadesRoutes);
     this.express.use('/api/culturas', authMiddleware, culturasRoutes);
     this.express.use('/api/pragas', authMiddleware, pragasRoutes);
     this.express.use('/api/perdas', authMiddleware, perdasRoutes);
